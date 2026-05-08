@@ -10,6 +10,8 @@ const Details = function () {
   const params = useParams();
   const [hover, setHover] = useState(false);
   const [quantiGiorni, setQuantiGiorni] = useState(10);
+  const [limiteRaggiunto, setLimiteRaggiunto] = useState(false);
+  const LIMITE_MASSIMO = 5;
 
   const chiamaPrevisioni = function () {
     fetch(`${previsioniAPI}${params.name}${myKey}`)
@@ -77,15 +79,30 @@ const Details = function () {
             </Col>
           );
         })}
+
+        <Col xs={12} className="text-center mt-3">
+          {limiteRaggiunto && (
+            <p className="text-danger fw-bold">
+              ⚠️ Limite massimo raggiunto — É possibile visualizzare massimo i
+              seguenti 5 giorni!
+            </p>
+          )}
+          <Button
+            onClick={() => {
+              if (quantiGiorni >= LIMITE_MASSIMO) {
+                setLimiteRaggiunto(true);
+                setTimeout(() => {
+                  setLimiteRaggiunto(false);
+                }, 3000);
+                return;
+              }
+              setQuantiGiorni(quantiGiorni + 5);
+            }}
+          >
+            Vedi di più
+          </Button>
+        </Col>
       </Row>
-      <Button
-        onClick={() => {
-          setQuantiGiorni(quantiGiorni + 5);
-          //raggiunto limite piano gratuito
-        }}
-      >
-        vedi di piu
-      </Button>
     </Container>
   );
 };
