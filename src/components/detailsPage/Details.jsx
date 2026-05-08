@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Col, Row, Container, Card } from "react-bootstrap";
+import { Col, Row, Container, Card, Button } from "react-bootstrap";
 
 const previsioniAPI = `https://api.openweathermap.org/data/2.5/forecast?q=`;
 const myKey = "&appid=4146ec1e1131a29a34efa1ecc6687a6c";
@@ -9,6 +9,7 @@ const Details = function () {
   const [previsioniCitta, setPrevisioniCitta] = useState();
   const params = useParams();
   const [hover, setHover] = useState(false);
+  const [quantiGiorni, setQuantiGiorni] = useState(10);
 
   const chiamaPrevisioni = function () {
     fetch(`${previsioniAPI}${params.name}${myKey}`)
@@ -22,13 +23,13 @@ const Details = function () {
 
   useEffect(() => {
     chiamaPrevisioni();
-  }, [params]);
+  }, [params, quantiGiorni]);
 
   if (!previsioniCitta) return;
 
   const previsioniGiornaliere = previsioniCitta.list
     .filter((_, index) => index % 8 === 0)
-    .slice(0, 5);
+    .slice(0, quantiGiorni);
 
   console.log(previsioniCitta);
   return (
@@ -77,6 +78,14 @@ const Details = function () {
           );
         })}
       </Row>
+      <Button
+        onClick={() => {
+          setQuantiGiorni(quantiGiorni + 5);
+          //raggiunto limite piano gratuito
+        }}
+      >
+        vedi di piu
+      </Button>
     </Container>
   );
 };

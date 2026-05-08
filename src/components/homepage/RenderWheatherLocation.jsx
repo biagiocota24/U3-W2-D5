@@ -49,7 +49,7 @@ const WheatherLocation = function (props) {
 
   return (
     <Row className="justify-content-center mt-5">
-      <Col xs={11} md={10}>
+      <Col xs={11} md={9} lg={8} xl={6}>
         <Card
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}

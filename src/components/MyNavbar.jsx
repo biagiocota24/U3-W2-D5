@@ -1,10 +1,10 @@
 import { Navbar, Container, Nav, Form, Button } from "react-bootstrap";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import Logo from "/public/weather_app_icon_blue.svg";
 
 const MyNavbar = function (props) {
   const location = useLocation();
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
 
   const searchDetailPage = () => {
     if (!props.query) return;
@@ -22,7 +22,7 @@ const MyNavbar = function (props) {
     >
       <Container fluid>
         <Link className="navbar-brand" to="/">
-          METEO
+          <img src={Logo} style={{ width: "70px" }} />
         </Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -36,10 +36,13 @@ const MyNavbar = function (props) {
               </Link>
             )}
           </Nav>
-          <Form className="d-flex" onSubmit={(e)=> {
-            e.preventDefault()
-            searchDetailPage()
-          }}>
+          <Form
+            className="d-flex"
+            onSubmit={(e) => {
+              e.preventDefault();
+              searchDetailPage();
+            }}
+          >
             <Form.Control
               type="search"
               placeholder="Search location"
@@ -50,7 +53,11 @@ const MyNavbar = function (props) {
                 props.setQuery(e.target.value);
               }}
             />
-            <Button variant="outline-dark" className="text-black" onClick={searchDetailPage}>
+            <Button
+              variant="outline-dark"
+              className="text-black"
+              onClick={searchDetailPage}
+            >
               Search
             </Button>
           </Form>
