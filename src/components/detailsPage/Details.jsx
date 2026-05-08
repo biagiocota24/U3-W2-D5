@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Col, Row, Container, Card, Button } from "react-bootstrap";
 
 const previsioniAPI = `https://api.openweathermap.org/data/2.5/forecast?q=`;
@@ -11,29 +11,52 @@ const Details = function () {
   const [hover, setHover] = useState(false);
   const [quantiGiorni, setQuantiGiorni] = useState(10);
   const [limiteRaggiunto, setLimiteRaggiunto] = useState(false);
+  const [notFound, setNotFound] = useState(false);
   const LIMITE_MASSIMO = 5;
+  const navigate = useNavigate();
 
   const chiamaPrevisioni = function () {
     fetch(`${previsioniAPI}${params.name}${myKey}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(params);
+        if (data.cod !== "200") {
+          setPrevisioniCitta(null);
+          setNotFound(true);
+          return;
+        }
         setPrevisioniCitta(data);
+          setNotFound(false);
+
       })
       .catch((err) => console.log("errore", err));
   };
 
   useEffect(() => {
     chiamaPrevisioni();
-  }, [params, quantiGiorni]);
+  }, [params.name, quantiGiorni,]);
 
-  if (!previsioniCitta) return;
+  if (notFound)
+    return (
+      <Container className="mt-5 text-center">
+        <h4>😕 City not found</h4>
+        <Button
+          onClick={() => {
+            navigate(-1);
+            chiamaPrevisioni();
+          }}
+          className="mt-3"
+        >
+          Torna indietro
+        </Button>
+      </Container>
+    );
+
+  if (!previsioniCitta) return <p>Caricamento...</p>;
 
   const previsioniGiornaliere = previsioniCitta.list
     .filter((_, index) => index % 8 === 0)
     .slice(0, quantiGiorni);
 
-  console.log(previsioniCitta);
   return (
     <Container className="mt-5">
       <h2 className="text-center mb-4">
