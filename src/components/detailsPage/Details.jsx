@@ -22,7 +22,7 @@ const Details = function () {
 
   useEffect(() => {
     chiamaPrevisioni();
-  }, []);
+  }, [params]);
 
   if (!previsioniCitta) return;
 

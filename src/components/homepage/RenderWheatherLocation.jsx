@@ -7,16 +7,15 @@ const myKey = "&appid=4146ec1e1131a29a34efa1ecc6687a6c";
 const WheatherLocation = function (props) {
   const [meteo, setMeteo] = useState(null);
   const [hover, setHover] = useState(false);
-
   const navigate = useNavigate();
 
   const searchByQuery = function () {
-    if (props.query.length < 3) return; // ← non cercare con meno di 3 caratteri
+    if (props.query.length < 3) return;
 
     fetch(`${APIlink}${props.query}${myKey}`)
       .then((response) => response.json())
       .then((data) => {
-        if (data.cod !== 200) return; // ← non aggiornare lo stato se la città non esiste
+        if (data.cod !== 200) return;
         setMeteo(data);
       })
       .catch(console.error);
@@ -41,7 +40,7 @@ const WheatherLocation = function (props) {
         return;
       }
       searchBySelect();
-    }, 500);
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, [props.nazioneSelezionata, props.citta, props.query]);

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Form, Container, Row, Col } from "react-bootstrap";
 import nazioni from "../../data/Nazioni";
 

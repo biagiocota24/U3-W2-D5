@@ -1,7 +1,17 @@
 import { Navbar, Container, Nav, Form, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const MyNavbar = function (props) {
+  const location = useLocation();
+  const navigate = useNavigate()
+
+
+  const searchDetailPage = () => {
+    if (!props.query) return;
+    navigate(`/Details/${props.query}`);
+    props.setQuery("");
+  };
+
   return (
     <Navbar
       className="py-3"
@@ -20,17 +30,19 @@ const MyNavbar = function (props) {
             <Link className="nav-link" to="/">
               Home
             </Link>
-            <Link className="nav-link" to="/searchCity">
-              Cerca
-            </Link>
-            <Link className="nav-link" to="ing">
-              previsioni
-            </Link>
+            {location.pathname.includes("/Details/") && (
+              <Link className="nav-link disabled active fw-bold" to="ing">
+                Previsioni
+              </Link>
+            )}
           </Nav>
-          <Form className="d-flex">
+          <Form className="d-flex" onSubmit={(e)=> {
+            e.preventDefault()
+            searchDetailPage()
+          }}>
             <Form.Control
               type="search"
-              placeholder="Search"
+              placeholder="Search location"
               className="me-2 bg-white text-dark"
               aria-label="Search"
               value={props.query}
@@ -38,7 +50,7 @@ const MyNavbar = function (props) {
                 props.setQuery(e.target.value);
               }}
             />
-            <Button variant="outline-dark" className="text-black">
+            <Button variant="outline-dark" className="text-black" onClick={searchDetailPage}>
               Search
             </Button>
           </Form>
