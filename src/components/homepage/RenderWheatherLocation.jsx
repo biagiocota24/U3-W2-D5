@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card, Row, Col } from "react-bootstrap";
+import { Card, Row, Col ,Container,Button} from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 const APIlink = "https://api.openweathermap.org/data/2.5/weather?q=";
 const myKey = "&appid=4146ec1e1131a29a34efa1ecc6687a6c";
@@ -15,7 +15,21 @@ const WheatherLocation = function (props) {
     fetch(`${APIlink}${props.query}${myKey}`)
       .then((response) => response.json())
       .then((data) => {
-        if (data.cod !== 200) return;
+        if (data.cod !== 200) {
+          return (
+            <Container className="mt-5 text-center">
+              <h4>😕 City not found</h4>
+              <Button
+                onClick={() => {
+                  navigate(-1);
+                }}
+                className="mt-3"
+              >
+                Torna indietro
+              </Button>
+            </Container>
+          );
+        }
         setMeteo(data);
       })
       .catch(console.error);
